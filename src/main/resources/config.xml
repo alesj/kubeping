@@ -44,7 +44,6 @@
             oob_thread_pool.rejection_policy="discard"/>
 
     <io.fabric8.jgroups.zookeeper.ConfigurableZooKeeperPing
-            name="test"
             connection="localhost:2181"/>
     <MERGE2 max_interval="30000"
             min_interval="10000"/>
