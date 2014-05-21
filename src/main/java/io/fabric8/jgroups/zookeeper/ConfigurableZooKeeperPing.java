@@ -90,4 +90,24 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
             .retryPolicy(new RetryNTimes(maxRetry, retryInterval));
         return builder.build();
     }
+
+    public void setConnection(String connection) {
+        this.connection = connection;
+    }
+
+    public void setConnectionTimeout(int connectionTimeout) {
+        this.connectionTimeout = connectionTimeout;
+    }
+
+    public void setSessionTimeout(int sessionTimeout) {
+        this.sessionTimeout = sessionTimeout;
+    }
+
+    public void setMaxRetry(int maxRetry) {
+        this.maxRetry = maxRetry;
+    }
+
+    public void setRetryInterval(int retryInterval) {
+        this.retryInterval = retryInterval;
+    }
 }

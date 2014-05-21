@@ -18,6 +18,7 @@
         <version.jgroups>3.4.1.Final</version.jgroups>
         <version.zookeeper>3.4.6</version.zookeeper>
         <version.curator>2.4.2</version.curator>
+        <version.junit>4.11</version.junit>
     </properties>
 
     <dependencyManagement>
@@ -39,6 +40,13 @@
                 <artifactId>curator-framework</artifactId>
                 <version>${version.curator}</version>
             </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${version.junit}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -57,6 +65,12 @@
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
