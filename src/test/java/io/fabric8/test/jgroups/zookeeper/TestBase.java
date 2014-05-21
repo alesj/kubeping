@@ -19,6 +19,8 @@ package io.fabric8.test.jgroups.zookeeper;
 import io.fabric8.jgroups.zookeeper.ConfigurableZooKeeperPing;
 import io.fabric8.test.jgroups.zookeeper.support.ZooKeeperUtils;
 import org.jgroups.JChannel;
+import org.jgroups.Message;
+import org.jgroups.ReceiverAdapter;
 import org.jgroups.protocols.TCP;
 import org.jgroups.protocols.UNICAST3;
 import org.jgroups.protocols.pbcast.GMS;
@@ -30,13 +32,17 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public abstract class TestBase {
-    private static final int NUM = 2;
+    protected static final int NUM = 2;
 
-    protected JChannel[] channels;
+    protected JChannel[]   channels=new JChannel[NUM];
+    protected MyReceiver[] receivers=new MyReceiver[NUM];
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -50,8 +56,6 @@ public abstract class TestBase {
 
     @Before
     public void setUp() throws Exception {
-        channels = new JChannel[NUM];
-
         for (int i = 0; i < NUM; i++) {
             ConfigurableZooKeeperPing zkPing = new ConfigurableZooKeeperPing();
             zkPing.setConnection("localhost:2181");
@@ -66,13 +70,26 @@ public abstract class TestBase {
             );
             channels[i].setName(Character.toString((char) ('A' + i)));
             channels[i].connect("test");
+            channels[i].setReceiver(receivers[i]=new MyReceiver());
         }
     }
 
     @After
     public void tearDown() throws Exception {
-        for (int i = 0; i < NUM; i++) {
-            Util.close(channels[i]);
+        Util.close(channels);
+    }
+
+    protected void clearReceivers() {for(MyReceiver r: receivers) r.getList().clear();}
+
+    protected static class MyReceiver extends ReceiverAdapter {
+        protected final List<Integer> list=new ArrayList<Integer>();
+
+        public List<Integer> getList() {return list;}
+
+        public void receive(Message msg) {
+            synchronized(list) {
+                list.add((Integer)msg.getObject());
+            }
         }
     }
 }
