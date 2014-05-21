@@ -43,6 +43,10 @@ public class ZooKeeperUtils {
             properties = new Properties();
             properties.load(stream);
         }
+        // set temp data dir
+        String tempDir = File.createTempFile("dummy-", ".f8").getParent();
+        properties.put("dataDir", tempDir);
+
         startServer(properties);
     }
 
@@ -99,8 +103,10 @@ public class ZooKeeperUtils {
         }
 
         void stop() throws Exception {
-            cnxnFactory.shutdown();
-            cnxnFactory.join();
+            if (cnxnFactory != null) {
+                cnxnFactory.shutdown();
+                cnxnFactory.join();
+            }
         }
     }
 }
