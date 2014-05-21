@@ -16,6 +16,9 @@
 
 package io.fabric8.test.jgroups.zookeeper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.fabric8.jgroups.zookeeper.ConfigurableZooKeeperPing;
 import io.fabric8.test.jgroups.zookeeper.support.ZooKeeperUtils;
 import org.jgroups.JChannel;
@@ -32,17 +35,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public abstract class TestBase {
     protected static final int NUM = 2;
 
-    protected JChannel[]   channels=new JChannel[NUM];
-    protected MyReceiver[] receivers=new MyReceiver[NUM];
+    protected JChannel[] channels = new JChannel[NUM];
+    protected MyReceiver[] receivers = new MyReceiver[NUM];
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -70,7 +70,7 @@ public abstract class TestBase {
             );
             channels[i].setName(Character.toString((char) ('A' + i)));
             channels[i].connect("test");
-            channels[i].setReceiver(receivers[i]=new MyReceiver());
+            channels[i].setReceiver(receivers[i] = new MyReceiver());
         }
     }
 
@@ -79,16 +79,20 @@ public abstract class TestBase {
         Util.close(channels);
     }
 
-    protected void clearReceivers() {for(MyReceiver r: receivers) r.getList().clear();}
+    protected void clearReceivers() {
+        for (MyReceiver r : receivers) r.getList().clear();
+    }
 
     protected static class MyReceiver extends ReceiverAdapter {
-        protected final List<Integer> list=new ArrayList<Integer>();
+        protected final List<Integer> list = new ArrayList<>();
 
-        public List<Integer> getList() {return list;}
+        public List<Integer> getList() {
+            return list;
+        }
 
         public void receive(Message msg) {
-            synchronized(list) {
-                list.add((Integer)msg.getObject());
+            synchronized (list) {
+                list.add((Integer) msg.getObject());
             }
         }
     }

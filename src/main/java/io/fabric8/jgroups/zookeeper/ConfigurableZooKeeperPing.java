@@ -28,8 +28,8 @@ import org.jgroups.conf.ClassConfigurator;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  * @author Bela Ban
  */
-@MBean(description="ZooKeeper based discovery protocol. Acts as a ZooKeeper client and accesses ZooKeeper servers " +
-  "to fetch discovery information")
+@MBean(description = "ZooKeeper based discovery protocol. Acts as a ZooKeeper client and accesses ZooKeeper servers " +
+    "to fetch discovery information")
 public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
     @Property
     protected String connection;

@@ -16,6 +16,13 @@
 
 package io.fabric8.jgroups.zookeeper;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.ZKPaths;
 import org.apache.zookeeper.CreateMode;
@@ -24,13 +31,6 @@ import org.jgroups.Event;
 import org.jgroups.protocols.FILE_PING;
 import org.jgroups.protocols.PingData;
 import org.jgroups.util.Util;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
@@ -100,7 +100,7 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
      * @return all data
      */
     protected synchronized List<PingData> readAll(String clusterName) {
-        List<PingData> retval = new ArrayList<PingData>();
+        List<PingData> retval = new ArrayList<>();
         try {
             String clusterPath = discoveryPath;
             for (String node : curator.getChildren().forPath(clusterPath)) {
