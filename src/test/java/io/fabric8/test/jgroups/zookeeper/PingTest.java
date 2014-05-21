@@ -17,7 +17,6 @@
 package io.fabric8.test.jgroups.zookeeper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.jgroups.JChannel;
@@ -43,7 +42,7 @@ public class PingTest extends TestBase {
         List<Integer> msgs = receivers[NUM - 1].getList();
         Util.waitUntilListHasSize(msgs, 10, 10000, 1000);
         System.out.println("msgs = " + msgs);
-        for (int i : Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)) {
+        for (int i = 1; i < 10; i++) {
             Assert.assertTrue(msgs.contains(i));
         }
         clearReceivers();
