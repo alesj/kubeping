@@ -73,14 +73,14 @@ public class ZooKeeperUtils {
     }
 
     private static class SimpleServer {
+        private ZooKeeperServer zkServer;
         private NIOServerCnxnFactory cnxnFactory;
 
         void start(QuorumPeerConfig peerConfig) throws Exception {
             ServerConfig serverConfig = getServerConfig(peerConfig);
 
-            ZooKeeperServer zkServer = new ZooKeeperServer();
-            FileTxnSnapLog ftxn = new FileTxnSnapLog(new File(serverConfig.getDataLogDir()), new File(serverConfig.getDataDir()));
-            zkServer.setTxnLogFactory(ftxn);
+            zkServer = new ZooKeeperServer();
+            zkServer.setTxnLogFactory(new FileTxnSnapLog(new File(serverConfig.getDataLogDir()), new File(serverConfig.getDataDir())));
             zkServer.setTickTime(serverConfig.getTickTime());
             zkServer.setMinSessionTimeout(serverConfig.getMinSessionTimeout());
             zkServer.setMaxSessionTimeout(serverConfig.getMaxSessionTimeout());
@@ -107,6 +107,13 @@ public class ZooKeeperUtils {
                 cnxnFactory.shutdown();
                 cnxnFactory.join();
             }
+            if (zkServer != null) {
+                if (zkServer.getZKDatabase() != null) {
+                    zkServer.getZKDatabase().close();
+                }
+            }
+            cnxnFactory = null;
+            zkServer = null;
         }
     }
 }
