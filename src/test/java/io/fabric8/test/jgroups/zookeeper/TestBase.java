@@ -19,7 +19,7 @@ package io.fabric8.test.jgroups.zookeeper;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.fabric8.jgroups.zookeeper.ConfigurableZooKeeperPing;
+import io.fabric8.jgroups.zookeeper.AbstractZooKeeperPing;
 import io.fabric8.test.jgroups.zookeeper.support.ZooKeeperUtils;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
@@ -57,8 +57,7 @@ public abstract class TestBase {
     @Before
     public void setUp() throws Exception {
         for (int i = 0; i < NUM; i++) {
-            ConfigurableZooKeeperPing zkPing = new ConfigurableZooKeeperPing();
-            zkPing.setConnection("localhost:2181");
+            AbstractZooKeeperPing zkPing = createZooKeeperPing();
 
             channels[i] = new JChannel(
                 new TCP(),
@@ -78,6 +77,8 @@ public abstract class TestBase {
     public void tearDown() throws Exception {
         Util.close(channels);
     }
+
+    protected abstract AbstractZooKeeperPing createZooKeeperPing();
 
     protected void clearReceivers() {
         for (MyReceiver r : receivers) r.getList().clear();
