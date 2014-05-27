@@ -19,7 +19,6 @@ package io.fabric8.test.jgroups.zookeeper;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.fabric8.jgroups.zookeeper.AbstractZooKeeperPing;
 import io.fabric8.test.jgroups.zookeeper.support.ZooKeeperUtils;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
@@ -29,6 +28,7 @@ import org.jgroups.protocols.UNICAST3;
 import org.jgroups.protocols.pbcast.GMS;
 import org.jgroups.protocols.pbcast.NAKACK2;
 import org.jgroups.protocols.pbcast.STABLE;
+import org.jgroups.stack.Protocol;
 import org.jgroups.util.Util;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -57,11 +57,11 @@ public abstract class TestBase {
     @Before
     public void setUp() throws Exception {
         for (int i = 0; i < NUM; i++) {
-            AbstractZooKeeperPing zkPing = createZooKeeperPing();
+            Protocol ping = createPing();
 
             channels[i] = new JChannel(
                 new TCP(),
-                zkPing,
+                ping,
                 new NAKACK2(),
                 new UNICAST3(),
                 new STABLE(),
@@ -78,7 +78,7 @@ public abstract class TestBase {
         Util.close(channels);
     }
 
-    protected abstract AbstractZooKeeperPing createZooKeeperPing();
+    protected abstract Protocol createPing();
 
     protected void clearReceivers() {
         for (MyReceiver r : receivers) r.getList().clear();

@@ -16,18 +16,19 @@
 
 package io.fabric8.test.jgroups.zookeeper;
 
-import io.fabric8.jgroups.zookeeper.AbstractZooKeeperPing;
-import io.fabric8.jgroups.zookeeper.ConfigurableZooKeeperPing;
+import org.jgroups.protocols.FILE_PING;
+import org.jgroups.stack.Protocol;
 
 /**
+ * A parallel test to ZK tests.
+ * Just so we know tests are fine.
+ *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class PingTest extends PingTestBase {
+public class SimplePingTest extends PingTestBase {
 
-    protected AbstractZooKeeperPing createZooKeeperPing() {
-        ConfigurableZooKeeperPing zkPing = new ConfigurableZooKeeperPing();
-        zkPing.setConnection("localhost:2181");
-        return zkPing;
+    protected Protocol createPing() {
+        return new FILE_PING();
     }
 
 }
