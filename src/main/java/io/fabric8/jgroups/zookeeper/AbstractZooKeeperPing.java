@@ -56,7 +56,7 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
     @Override
     public void stop() {
         try {
-            removeLocalNode();
+            removeNode(localNodePath);
         } finally {
             super.stop();
         }
@@ -161,20 +161,15 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
         }
     }
 
-    protected void removeLocalNode() {
+    protected void removeNode(String path) {
         try {
-            curator.delete().forPath(localNodePath);
+            curator.delete().forPath(path);
         } catch (Exception e) {
-            log.error(String.format("Failed removing %s", localNodePath), e);
+            log.error(String.format("Failed removing %s", path), e);
         }
     }
 
     protected void remove(String clustername, Address addr) {
-        String nodePath = discoveryPath + "/" + addressAsString(addr);
-        try {
-            curator.delete().forPath(nodePath);
-        } catch (Exception e) {
-            log.error(String.format("Failed removing %s", nodePath), e);
-        }
+        removeNode(discoveryPath + "/" + addressAsString(addr));
     }
 }
