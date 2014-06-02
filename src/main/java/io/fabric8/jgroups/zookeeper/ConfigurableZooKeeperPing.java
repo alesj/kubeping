@@ -72,13 +72,9 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
     @Override
     public void stop() {
         try {
-            removeLocalNode();
+            super.stop();
         } finally {
-            try {
-                super.stop();
-            } finally {
-                curator.close();
-            }
+            curator.close();
         }
     }
 
