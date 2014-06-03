@@ -79,11 +79,14 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
     }
 
     protected CuratorFramework createCurator() {
+        log.info(String.format("Creating curator at %s", connection));
+
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder()
             .ensembleProvider(new FixedEnsembleProvider(connection))
             .connectionTimeoutMs(connectionTimeout)
             .sessionTimeoutMs(sessionTimeout)
             .retryPolicy(new RetryNTimes(maxRetry, retryInterval));
+
         return builder.build();
     }
 
