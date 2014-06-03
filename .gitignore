@@ -15,3 +15,6 @@ atlassian*
 tmp/
 target/
 lib/
+impl/target/
+integration/target/
+

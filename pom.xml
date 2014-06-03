@@ -1,28 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ JBoss, Home of Professional Open Source.
+  ~ Copyright 2010, Red Hat, Inc., and individual contributors
+  ~ as indicated by the @author tags. See the copyright.txt file in the
+  ~ distribution for a full listing of individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.jboss</groupId>
         <artifactId>jboss-parent</artifactId>
         <version>14</version>
     </parent>
-    <groupId>io.fabric8</groupId>
-    <artifactId>zkping</artifactId>
+
+    <groupId>io.fabric8.jgroups</groupId>
+    <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>ZooKeeper JGroups PING</name>
-    <url>http://www.fabric8.io</url>
-    <description>ZooKeeper JGroups PING</description>
+
+    <name>Fabric8 JGroups - Parent Aggregator</name>
+    <description>Fabric8 JGroups - Parent Aggregator</description>
+
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>lgpl</name>
+            <url>http://repository.jboss.org/licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
+        <!-- Impl -->
         <version.jgroups>3.4.1.Final</version.jgroups>
         <version.zookeeper>3.4.6</version.zookeeper>
         <version.curator>2.5.0</version.curator>
         <version.junit>4.11</version.junit>
+        <!-- Build -->
+        <version.org.jboss.jandex>1.1.0.Final</version.org.jboss.jandex>
+        <version.org.apache.ant>1.8.2</version.org.apache.ant>
+        <version.rhino.js>1.7R2</version.rhino.js>
     </properties>
+
+    <modules>
+        <module>impl</module>
+        <module>build</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.fabric8.jgroups</groupId>
+                <artifactId>zkping</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.jgroups</groupId>
                 <artifactId>jgroups</artifactId>
@@ -50,29 +99,35 @@
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
+    <repositories>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
-        <dependency>
-            <groupId>org.jgroups</groupId>
-            <artifactId>jgroups</artifactId>
-        </dependency>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Repository Group</name>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
-        <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.curator</groupId>
-            <artifactId>curator-framework</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
 </project>
-

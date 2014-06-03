@@ -20,8 +20,9 @@ package io.fabric8.jgroups.zookeeper;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class Constants {
-    public static final short CONFIGURABLE_ZK_PING_ID = 1001;
-    public static final short MANAGED_ZK_PING_ID = 1002;
+    public static final short WF_ZK_PING_ID = 1001; // wildfly
+    public static final short CONFIGURABLE_ZK_PING_ID = 1002;
+    public static final short MANAGED_ZK_PING_ID = 1003;
 
     public static final String ZOOKEEPER_URL = "zookeeper.url";
     public static final String ZOOKEEPER_PASSWORD = "zookeeper.password";
