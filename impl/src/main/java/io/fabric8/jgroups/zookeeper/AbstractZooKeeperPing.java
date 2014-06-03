@@ -46,7 +46,7 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
 
     protected CuratorFramework curator;
 
-    protected abstract CuratorFramework createCurator();
+    protected abstract CuratorFramework createCurator() throws KeeperException;
 
     protected CreateMode getCreateMode() throws KeeperException {
         return CreateMode.EPHEMERAL;

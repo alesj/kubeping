@@ -88,8 +88,8 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
         }
     }
 
-    protected CuratorFramework createCurator() {
-        log.info(String.format("Creating curator at %s", connection));
+    protected CuratorFramework createCurator() throws KeeperException {
+        log.info(String.format("Creating curator [%s], mode: %s", connection, getCreateMode()));
 
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder()
             .ensembleProvider(new FixedEnsembleProvider(connection))
