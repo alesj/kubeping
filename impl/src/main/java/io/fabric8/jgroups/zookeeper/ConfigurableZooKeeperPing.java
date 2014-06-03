@@ -20,6 +20,8 @@ import org.apache.curator.ensemble.fixed.FixedEnsembleProvider;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.RetryNTimes;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException;
 import org.jgroups.annotations.MBean;
 import org.jgroups.annotations.Property;
 import org.jgroups.conf.ClassConfigurator;
@@ -46,8 +48,16 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
     @Property
     protected int retryInterval = Constants.DEFAULT_RETRY_INTERVAL;
 
+    @Property
+    protected int mode = CreateMode.EPHEMERAL.toFlag();
+
     static {
         ClassConfigurator.addProtocol(Constants.CONFIGURABLE_ZK_PING_ID, ConfigurableZooKeeperPing.class);
+    }
+
+    @Override
+    protected CreateMode getCreateMode() throws KeeperException {
+        return CreateMode.fromFlag(mode);
     }
 
     @Override

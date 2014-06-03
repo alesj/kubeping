@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.utils.ZKPaths;
 import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.KeeperException;
 import org.jgroups.Address;
 import org.jgroups.Event;
 import org.jgroups.protocols.FILE_PING;
@@ -46,6 +47,10 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
     protected CuratorFramework curator;
 
     protected abstract CuratorFramework createCurator();
+
+    protected CreateMode getCreateMode() throws KeeperException {
+        return CreateMode.EPHEMERAL;
+    }
 
     @Override
     public void init() throws Exception {
@@ -87,7 +92,7 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
     protected void _createRootDir() {
         try {
             if (curator.checkExists().forPath(localNodePath) == null) {
-                curator.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(localNodePath);
+                curator.create().creatingParentsIfNeeded().withMode(getCreateMode()).forPath(localNodePath);
             }
         } catch (Exception e) {
             throw new RuntimeException(String.format("Failed to create dir %s in ZooKeeper.", localNodePath), e);
@@ -146,7 +151,7 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
             data.writeTo(dos);
 
             if (curator.checkExists().forPath(localNodePath) == null) {
-                curator.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(localNodePath, baos.toByteArray());
+                curator.create().creatingParentsIfNeeded().withMode(getCreateMode()).forPath(localNodePath, baos.toByteArray());
             } else {
                 curator.setData().forPath(localNodePath, baos.toByteArray());
             }
