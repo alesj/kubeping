@@ -40,8 +40,8 @@ import org.jgroups.util.Util;
 public abstract class AbstractZooKeeperPing extends FILE_PING {
     private static final String ROOT_PATH = "/fabric/registry/jgroups/";
 
-    private String discoveryPath;
-    private String localNodePath;
+    private volatile String discoveryPath;
+    private volatile String localNodePath;
 
     protected CuratorFramework curator;
 
@@ -102,9 +102,8 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
     protected synchronized List<PingData> readAll(String clusterName) {
         List<PingData> retval = new ArrayList<>();
         try {
-            String clusterPath = discoveryPath;
-            for (String node : curator.getChildren().forPath(clusterPath)) {
-                String nodePath = ZKPaths.makePath(clusterPath, node);
+            for (String node : curator.getChildren().forPath(discoveryPath)) {
+                String nodePath = ZKPaths.makePath(discoveryPath, node);
                 PingData nodeData = readPingData(nodePath);
                 if (nodeData != null)
                     retval.add(nodeData);
@@ -139,8 +138,6 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
     }
 
     protected synchronized void writePingData(PingData data) {
-        String nodePath = localNodePath;
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = null;
         try {
@@ -148,7 +145,7 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
 
             data.writeTo(dos);
 
-            if (curator.checkExists().forPath(nodePath) == null) {
+            if (curator.checkExists().forPath(localNodePath) == null) {
                 curator.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(localNodePath, baos.toByteArray());
             } else {
                 curator.setData().forPath(localNodePath, baos.toByteArray());
