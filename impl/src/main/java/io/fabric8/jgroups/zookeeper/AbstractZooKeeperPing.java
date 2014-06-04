@@ -110,8 +110,9 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
             for (String node : curator.getChildren().forPath(discoveryPath)) {
                 String nodePath = ZKPaths.makePath(discoveryPath, node);
                 PingData nodeData = readPingData(nodePath);
-                if (nodeData != null)
+                if (nodeData != null) {
                     retval.add(nodeData);
+                }
             }
 
         } catch (Exception e) {
