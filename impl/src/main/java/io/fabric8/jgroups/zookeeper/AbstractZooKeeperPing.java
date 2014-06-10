@@ -167,6 +167,12 @@ public abstract class AbstractZooKeeperPing extends FILE_PING {
     protected void removeNode(String path) {
         try {
             curator.delete().forPath(path);
+        } catch (KeeperException.NoNodeException e) {
+            // just log this, to keep down to 1 call, instead of 2 (exists + delete)
+            // coord nodes already remove this in handleView(), hence "expecting" this exception
+            if (log.isTraceEnabled()) {
+                log.trace(String.format("Node '%s' already removed: %s", path, e));
+            }
         } catch (Exception e) {
             log.error(String.format("Failed removing %s", path), e);
         }
