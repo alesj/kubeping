@@ -66,25 +66,15 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
             throw new IllegalArgumentException("Missing connection property!");
         }
         super.init();
-    }
-
-    @Override
-    public void start() throws Exception {
         curator.start();
-        try {
-            super.start();
-        } catch (Exception e) {
-            curator.close();
-            throw e;
-        }
     }
 
     @Override
-    public void stop() {
+    public void destroy() {
         try {
-            super.stop();
-        } finally {
             curator.close();
+        } finally {
+            super.destroy();
         }
     }
 
