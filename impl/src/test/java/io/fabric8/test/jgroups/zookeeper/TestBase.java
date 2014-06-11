@@ -40,6 +40,7 @@ import org.junit.BeforeClass;
  */
 public abstract class TestBase {
     protected static final int NUM = 2;
+    protected static final String CLUSTER_NAME = "test";
 
     protected JChannel[] channels = new JChannel[NUM];
     protected MyReceiver[] receivers = new MyReceiver[NUM];
@@ -68,7 +69,7 @@ public abstract class TestBase {
                 new GMS()
             );
             channels[i].setName(Character.toString((char) ('A' + i)));
-            channels[i].connect("test");
+            channels[i].connect(CLUSTER_NAME);
             channels[i].setReceiver(receivers[i] = new MyReceiver());
         }
     }

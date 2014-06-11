@@ -31,6 +31,20 @@ public abstract class PingTestBase extends TestBase {
 
     @Test
     public void testCluster() throws Exception {
+        doTestCluster();
+    }
+
+    @Test
+    public void testRestart() throws Exception {
+        doTestCluster();
+
+        channels[NUM - 1].disconnect();
+        channels[NUM - 1].connect(CLUSTER_NAME);
+
+        doTestCluster();
+    }
+
+    protected void doTestCluster() throws Exception {
         Util.waitUntilAllChannelsHaveSameSize(10000, 1000, channels);
 
         // Tests unicasts from the first to the last
@@ -45,6 +59,7 @@ public abstract class PingTestBase extends TestBase {
         for (int i = 1; i < 10; i++) {
             Assert.assertTrue(msgs.contains(i));
         }
+
         clearReceivers();
 
         // Tests multicasts
@@ -77,6 +92,8 @@ public abstract class PingTestBase extends TestBase {
                 Assert.assertTrue(list.contains(num));
             }
         }
+
+        clearReceivers();
     }
 
 }
