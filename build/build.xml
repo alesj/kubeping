@@ -59,6 +59,10 @@
             <maven-resource group="org.apache.zookeeper" artifact="zookeeper"/>
         </module-def>
 
+        <module-def name="org.jboss.as.clustering.jgroups">
+            <maven-resource group="org.wildfly" artifact="wildfly-clustering-jgroups"/>
+        </module-def>
+
     </target>
 
     <target name="clean-target">
