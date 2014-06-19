@@ -29,4 +29,13 @@ public class ZKPING extends ConfigurableZooKeeperPing {
     static {
         ClassConfigurator.addProtocol(Constants.WF_ZK_PING_ID, ZKPING.class);
     }
+
+    @Override
+    public void init() throws Exception {
+        String zkURL = System.getenv("FABRIC8_ZOOKEEPER_URL");
+        if (zkURL != null) {
+            connection = zkURL;
+        }
+        super.init();
+    }
 }
