@@ -19,6 +19,7 @@ package io.fabric8.jgroups.zookeeper;
 import org.apache.curator.ensemble.fixed.FixedEnsembleProvider;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.ACLProvider;
 import org.apache.curator.retry.RetryNTimes;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
@@ -37,6 +38,9 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
     protected String connection;
 
     @Property
+    protected String password;
+
+    @Property
     protected int connectionTimeout = Constants.DEFAULT_CONNECTION_TIMEOUT_MS;
 
     @Property
@@ -50,6 +54,8 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
 
     @Property
     protected int mode = CreateMode.EPHEMERAL.toFlag();
+
+    private ACLProvider aclProvider;
 
     static {
         ClassConfigurator.addProtocol(Constants.CONFIGURABLE_ZK_PING_ID, ConfigurableZooKeeperPing.class);
@@ -78,6 +84,14 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
         }
     }
 
+    protected String getScheme() {
+        return "digest";
+    }
+
+    protected byte[] getAuth() {
+        return password.getBytes();
+    }
+
     protected CuratorFramework createCurator() throws KeeperException {
         log.info(String.format("Creating curator [%s], mode: %s", connection, getCreateMode()));
 
@@ -86,6 +100,10 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
             .connectionTimeoutMs(connectionTimeout)
             .sessionTimeoutMs(sessionTimeout)
             .retryPolicy(new RetryNTimes(maxRetry, retryInterval));
+
+        if (password != null && password.length() > 0) {
+            builder = builder.authorization(getScheme(), getAuth()).aclProvider(aclProvider);
+        }
 
         return builder.build();
     }
@@ -108,5 +126,9 @@ public class ConfigurableZooKeeperPing extends AbstractZooKeeperPing {
 
     public void setRetryInterval(int retryInterval) {
         this.retryInterval = retryInterval;
+    }
+
+    public void setAclProvider(ACLProvider aclProvider) {
+        this.aclProvider = aclProvider;
     }
 }

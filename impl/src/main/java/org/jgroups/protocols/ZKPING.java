@@ -18,6 +18,8 @@ package org.jgroups.protocols;
 
 import io.fabric8.jgroups.zookeeper.ConfigurableZooKeeperPing;
 import io.fabric8.jgroups.zookeeper.Constants;
+import io.fabric8.jgroups.zookeeper.Fabric8ACLProvider;
+import io.fabric8.jgroups.zookeeper.PasswordEncoder;
 import org.jgroups.conf.ClassConfigurator;
 
 /**
@@ -32,10 +34,24 @@ public class ZKPING extends ConfigurableZooKeeperPing {
 
     @Override
     public void init() throws Exception {
+        // connection url
         String zkURL = System.getenv("FABRIC8_ZOOKEEPER_URL");
         if (zkURL != null) {
             connection = zkURL;
         }
+
+        // password
+        String zkPassword = System.getenv("FABRIC8_ZOOKEEPER_PASSWORD");
+        if (zkPassword != null) {
+            password = PasswordEncoder.decode(zkPassword);
+            setAclProvider(new Fabric8ACLProvider());
+        }
+
         super.init();
+    }
+
+    @Override
+    protected byte[] getAuth() {
+        return ("fabric:" + password).getBytes();
     }
 }
