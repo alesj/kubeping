@@ -78,8 +78,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.fabric8.jgroups</groupId>
-            <artifactId>zkping</artifactId>
+            <groupId>io.fabric8</groupId>
+            <artifactId>fabric-zookeeper-jgroups</artifactId>
         </dependency>
 
         <dependency>

@@ -46,8 +46,8 @@
             <maven-resource group="org.jgroups" artifact="jgroups"/>
         </module-def>
 
-        <module-def name="io.fabric8.jgroups">
-            <maven-resource group="io.fabric8.jgroups" artifact="zkping"/>
+        <module-def name="io.fabric8.fabric-zookeeper-jgroups">
+            <maven-resource group="io.fabric8" artifact="fabric-zookeeper-jgroups"/>
         </module-def>
 
         <module-def name="org.apache.curator">

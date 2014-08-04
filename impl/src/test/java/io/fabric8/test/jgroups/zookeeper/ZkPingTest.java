@@ -1,5 +1,8 @@
 package io.fabric8.test.jgroups.zookeeper;
 
+import java.util.List;
+
+import org.jgroups.protocols.PingData;
 import org.jgroups.protocols.ZKPING;
 import org.junit.Test;
 
@@ -8,12 +11,9 @@ import org.junit.Test;
  */
 public class ZkPingTest {
 
-    ZKPING ping;
-
     @Test
     public void testRead() throws Exception {
-        /*
-        ping = new ZKPING();
+        LookupPing ping = new LookupPing();
         ping.init();
         try {
             List<PingData> pings = ping.pings("capedwarf");
@@ -22,6 +22,11 @@ public class ZkPingTest {
             ping.stop();
             ping.destroy();
         }
-        */
+    }
+
+    private static class LookupPing extends ZKPING {
+        private List<PingData> pings(String cluster) {
+            return readAll(cluster);
+        }
     }
 }

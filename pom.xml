@@ -48,8 +48,9 @@
     </licenses>
 
     <properties>
+        <version.fabric8>1.1.0-SNAPSHOT</version.fabric8>
         <!-- Impl -->
-        <version.jgroups>3.4.1.Final</version.jgroups>
+        <version.jgroups>3.4.4.Final</version.jgroups>
         <version.zookeeper>3.4.6</version.zookeeper>
         <version.curator>2.5.0</version.curator>
         <version.junit>4.11</version.junit>
@@ -67,6 +68,14 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>fabric-zookeeper-jgroups</artifactId>
+                <version>${version.fabric8}</version>
+            </dependency>
+
+            <!-- Impl -->
+
             <dependency>
                 <groupId>io.fabric8.jgroups</groupId>
                 <artifactId>zkping</artifactId>

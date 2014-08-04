@@ -49,6 +49,6 @@
         <module name="org.wildfly.clustering.api" optional="true"/>
         <module name="org.wildfly.clustering.server" services="import" optional="true"/>
         <module name="org.wildfly.clustering.singleton" optional="true"/>
-        <module name="io.fabric8.jgroups"/>
+        <module name="io.fabric8.fabric-zookeeper-jgroups"/>
     </dependencies>
 </module>

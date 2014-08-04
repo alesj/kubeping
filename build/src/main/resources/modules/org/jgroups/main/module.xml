@@ -31,6 +31,6 @@
     <dependencies>
         <module name="javax.api"/>
         <module name="org.jboss.as.clustering.jgroups"/>
-        <module name="io.fabric8.jgroups"/>
+        <module name="io.fabric8.fabric-zookeeper-jgroups"/>
     </dependencies>
 </module>
