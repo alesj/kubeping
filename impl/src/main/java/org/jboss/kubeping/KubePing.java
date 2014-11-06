@@ -71,7 +71,7 @@ public class KubePing extends FILE_PING {
         if (port > 0) {
             return port;
         } else {
-            return 9995;
+            return 8888;
         }
     }
 

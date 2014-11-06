@@ -17,7 +17,6 @@
 package org.jboss.kubeping.rest;
 
 import java.io.DataOutputStream;
-import java.io.OutputStream;
 import java.util.Collections;
 
 import io.undertow.Undertow;
@@ -55,18 +54,22 @@ public class Server {
         undertow.stop();
     }
 
+    public static PingData createPingData(Channel channel) {
+        Address address = channel.getAddress();
+        View view = channel.getView();
+        boolean is_server = false;
+        String logical_name = channel.getName();
+        PhysicalAddress paddr = (PhysicalAddress) channel.down(new Event(Event.GET_PHYSICAL_ADDRESS, address));
+
+        return new PingData(address, view, is_server, logical_name, Collections.singleton(paddr));
+    }
+
     private class Handler implements HttpHandler {
         public void handleRequest(HttpServerExchange exchange) throws Exception {
-            OutputStream outputStream = exchange.getOutputStream();
+            exchange.startBlocking();
 
-            Address address = channel.getAddress();
-            View view = channel.getView();
-            boolean is_server = false;
-            String logical_name = channel.getName();
-            PhysicalAddress paddr = (PhysicalAddress) channel.down(new Event(Event.GET_PHYSICAL_ADDRESS, address));
-
-            PingData data = new PingData(address, view, is_server, logical_name, Collections.singleton(paddr));
-            data.writeTo(new DataOutputStream(outputStream));
+            PingData data = createPingData(channel);
+            data.writeTo(new DataOutputStream(exchange.getOutputStream()));
         }
     }
 }

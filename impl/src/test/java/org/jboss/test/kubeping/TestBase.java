@@ -38,11 +38,11 @@ import org.junit.BeforeClass;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public abstract class TestBase {
-    protected static final int NUM = 2;
+    private static final int NUM = 2;
     protected static final String CLUSTER_NAME = "test";
 
-    protected JChannel[] channels = new JChannel[NUM];
-    protected MyReceiver[] receivers = new MyReceiver[NUM];
+    protected JChannel[] channels;
+    protected MyReceiver[] receivers;
 
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -52,9 +52,16 @@ public abstract class TestBase {
     public static void tearDownClass() throws Exception {
     }
 
+    protected int getNum() {
+        return NUM;
+    }
+
     @Before
     public void setUp() throws Exception {
-        for (int i = 0; i < NUM; i++) {
+        channels = new JChannel[getNum()];
+        receivers = new MyReceiver[getNum()];
+
+        for (int i = 0; i < getNum(); i++) {
             Protocol ping = createPing();
 
             channels[i] = new JChannel(

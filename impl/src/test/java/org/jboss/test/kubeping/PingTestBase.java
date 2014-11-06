@@ -38,8 +38,8 @@ public abstract class PingTestBase extends TestBase {
     public void testRestart() throws Exception {
         doTestCluster();
 
-        channels[NUM - 1].disconnect();
-        channels[NUM - 1].connect(CLUSTER_NAME);
+        channels[getNum() - 1].disconnect();
+        channels[getNum() - 1].connect(CLUSTER_NAME);
 
         doTestCluster();
     }
@@ -48,12 +48,12 @@ public abstract class PingTestBase extends TestBase {
         Util.waitUntilAllChannelsHaveSameSize(10000, 1000, channels);
 
         // Tests unicasts from the first to the last
-        JChannel first = channels[0], last = channels[NUM - 1];
+        JChannel first = channels[0], last = channels[getNum() - 1];
         for (int i = 1; i <= 10; i++) {
             first.send(last.getAddress(), i);
         }
 
-        List<Integer> msgs = receivers[NUM - 1].getList();
+        List<Integer> msgs = receivers[getNum() - 1].getList();
         Util.waitUntilListHasSize(msgs, 10, 10000, 1000);
         System.out.println("msgs = " + msgs);
         for (int i = 1; i < 10; i++) {
@@ -63,7 +63,7 @@ public abstract class PingTestBase extends TestBase {
         clearReceivers();
 
         // Tests multicasts
-        for (int i = 0; i < NUM; i++) {
+        for (int i = 0; i < getNum(); i++) {
             JChannel ch = channels[i];
             int num = (i + 1) * 10;
             for (int j = 0; j <= 5; j++) {
@@ -71,22 +71,22 @@ public abstract class PingTestBase extends TestBase {
             }
         }
 
-        final int expected_size = NUM * 6;
+        final int expected_size = getNum() * 6;
         final List<Integer> expected_numbers = new ArrayList<>(expected_size);
-        for (int i = 0; i < NUM; i++) {
+        for (int i = 0; i < getNum(); i++) {
             int num = (i + 1) * 10;
             for (int j = 0; j <= 5; j++) {
                 expected_numbers.add(num + j);
             }
         }
 
-        for (int i = 0; i < NUM; i++) {
+        for (int i = 0; i < getNum(); i++) {
             List<Integer> list = receivers[i].getList();
             Util.waitUntilListHasSize(list, expected_size, 10000, 1000);
             System.out.println("list[" + i + "]: " + list);
         }
 
-        for (int i = 0; i < NUM; i++) {
+        for (int i = 0; i < getNum(); i++) {
             List<Integer> list = receivers[i].getList();
             for (int num : expected_numbers) {
                 Assert.assertTrue(list.contains(num));
