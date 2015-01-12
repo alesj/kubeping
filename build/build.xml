@@ -24,7 +24,7 @@
 
     <import file="lib.xml"/>
 
-    <property name="output.dir" value="target/fabric8-release"/>
+    <property name="output.dir" value="target/wildfly-kubeping-dist"/>
 
     <target name="base" depends="clean-target, copy-files"/>
 
@@ -37,7 +37,7 @@
                 <include name="bin/**.conf"/>
             </fileset>
         </copy>
-        <chmod file="${output.dir}/bin/fabric8.sh" perm="755"/>
+        <chmod file="${output.dir}/bin/kube.sh" perm="755"/>
     </target>
 
     <target name="modules">

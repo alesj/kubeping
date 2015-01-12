@@ -1,4 +1,5 @@
-#shortcut to boot WildFly with ZKPing configuration
+#!/bin/sh
+#shortcut to boot WildFly with KubePing configuration
 #if you need to set other boot options, please use standalone.sh
 
 DIRNAME=`dirname "$0"`

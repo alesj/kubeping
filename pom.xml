@@ -49,19 +49,20 @@
 
     <properties>
         <!-- Impl -->
-        <version.jgroups>3.4.4.Final</version.jgroups>
+        <version.jgroups>3.4.5.Final</version.jgroups>
         <version.dmr>1.2.0.Final</version.dmr>
-        <version.undertow>1.0.15.Final</version.undertow>
+        <version.undertow>1.1.0.Final</version.undertow>
         <version.junit>4.11</version.junit>
         <!-- Build -->
-        <version.org.wildfly>8.1.0.Final</version.org.wildfly>
-        <version.org.jboss.jandex>1.1.0.Final</version.org.jboss.jandex>
+        <version.org.wildfly>8.2.0.Final</version.org.wildfly>
+        <version.org.jboss.jandex>1.2.1.Final</version.org.jboss.jandex>
         <version.org.apache.ant>1.8.2</version.org.apache.ant>
         <version.rhino.js>1.7R2</version.rhino.js>
     </properties>
 
     <modules>
         <module>impl</module>
+        <module>download</module>
         <module>build</module>
     </modules>
 
@@ -69,8 +70,22 @@
         <dependencies>
             <dependency>
                 <groupId>org.jboss.kubeping</groupId>
+                <artifactId>download</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jboss.kubeping</groupId>
                 <artifactId>ping</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wildfly</groupId>
+                <artifactId>wildfly-dist</artifactId>
+                <version>${version.org.wildfly}</version>
+                <type>zip</type>
             </dependency>
 
             <dependency>

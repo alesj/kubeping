@@ -10,7 +10,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>build</artifactId>
+    <artifactId>wildfly-kubeping</artifactId>
 
     <name>KubePING - Build</name>
     <packaging>pom</packaging>
@@ -24,8 +24,89 @@
         <generated.configs.src.dir>${basedir}/src/main/resources</generated.configs.src.dir>
     </properties>
 
-
     <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <jboss.dir>${basedir}/../download/target/wildfly-${version.org.wildfly}</jboss.dir>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <inherited>false</inherited>
+                        <executions>
+                            <execution>
+                                <id>build-dist</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <phase>package</phase>
+                                <configuration>
+                                    <target>
+                                        <ant antfile="build.xml" inheritRefs="true">
+                                            <target name="all"/>
+                                        </ant>
+                                    </target>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>copy-dist</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <phase>install</phase>
+                                <configuration>
+                                    <target>
+                                        <ant antfile="copy.xml" inheritRefs="true">
+                                            <target name="copy"/>
+                                        </ant>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.jboss</groupId>
+                                <artifactId>jandex</artifactId>
+                                <version>${version.org.jboss.jandex}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-apache-bsf</artifactId>
+                                <version>${version.org.apache.ant}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>rhino</groupId>
+                                <artifactId>js</artifactId>
+                                <version>${version.rhino.js}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>zip</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                                <configuration>
+                                    <descriptors>
+                                        <descriptor>src/main/assemblies/packaging.xml</descriptor>
+                                    </descriptors>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>update-as</id>
             <activation>
@@ -77,6 +158,12 @@
     </profiles>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jboss.kubeping</groupId>
+            <artifactId>download</artifactId>
+            <type>pom</type>
+        </dependency>
+
         <dependency>
             <groupId>org.jboss.kubeping</groupId>
             <artifactId>ping</artifactId>
