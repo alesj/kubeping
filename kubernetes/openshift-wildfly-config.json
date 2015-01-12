@@ -26,16 +26,6 @@
       }
     },
     {
-      "kind": "Service",
-      "id": "wildfly-kubeping-service",
-      "apiVersion": "v1beta1",
-      "port": 8888,
-      "containerPort": 8888,
-      "selector": {
-        "name": "wildflyPod"
-      }
-    },
-    {
       "kind": "ReplicationController",
       "id": "wildflyController",
       "apiVersion": "v1beta1",
