@@ -26,16 +26,16 @@
     <fileSets>
         <fileSet>
             <directory>../download/target/wildfly-${version.org.wildfly}</directory>
-            <outputDirectory>/wildfly-kubeping</outputDirectory>
+            <outputDirectory>/wildfly</outputDirectory>
         </fileSet>
         <fileSet>
             <directory>../download/target/wildfly-${version.org.wildfly}/bin</directory>
-            <outputDirectory>/wildfly-kubeping/bin</outputDirectory>
+            <outputDirectory>/wildfly/bin</outputDirectory>
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
             <directory>../download/target/wildfly-${version.org.wildfly}/bin/init.d</directory>
-            <outputDirectory>/wildfly-kubeping/bin/init.d</outputDirectory>
+            <outputDirectory>/wildfly/bin/init.d</outputDirectory>
             <fileMode>0755</fileMode>
         </fileSet>
     </fileSets>
