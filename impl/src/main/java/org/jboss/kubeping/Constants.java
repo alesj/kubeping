@@ -21,4 +21,5 @@ package org.jboss.kubeping;
  */
 public class Constants {
     public static final short KUBE_PING_ID = 2001; // wildfly
+    public static final short HACK_KUBE_PING_ID = 2002; // wildfly
 }

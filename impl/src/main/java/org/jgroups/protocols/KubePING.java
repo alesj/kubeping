@@ -16,7 +16,9 @@
 
 package org.jgroups.protocols;
 
+import org.jboss.kubeping.Constants;
 import org.jboss.kubeping.KubePing;
+import org.jgroups.conf.ClassConfigurator;
 
 /**
  * A workaround "org.jgroups.protocols" prefix limitation.
@@ -24,4 +26,7 @@ import org.jboss.kubeping.KubePing;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class KubePING extends KubePing {
+    static {
+        ClassConfigurator.addProtocol(Constants.HACK_KUBE_PING_ID, KubePING.class);
+    }
 }
