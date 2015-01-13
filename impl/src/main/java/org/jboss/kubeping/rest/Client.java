@@ -40,6 +40,10 @@ public class Client {
         this.rootURL = String.format("http://%s:%s/api/%s", host, port, version);
     }
 
+    public String info() {
+        return "Kubernetes master URL: " + rootURL;
+    }
+
     protected ModelNode getNode(String op) throws IOException {
         InputStream stream = new URL(rootURL + "/" + op).openStream();
         return ModelNode.fromJSONStream(stream);

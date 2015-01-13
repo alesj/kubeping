@@ -89,8 +89,10 @@ public class KubePing extends FILE_PING {
     @Override
     public void start() throws Exception {
         client = new Client(getHost(), getPort(), getVersion());
+        log.info(client.info());
 
         server = new Server(getServerPort(), stack.getChannel());
+        log.info(server.info());
         server.start();
     }
 

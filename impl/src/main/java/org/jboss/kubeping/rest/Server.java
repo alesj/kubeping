@@ -42,6 +42,10 @@ public class Server {
         this.channel = channel;
     }
 
+    public String info() {
+        return String.format("Server deamon port: %s, channel address: %s", port, channel.getAddress());
+    }
+
     public void start() {
         Undertow.Builder builder = Undertow.builder();
         builder.addHttpListener(port, "127.0.0.1");
