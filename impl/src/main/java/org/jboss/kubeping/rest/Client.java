@@ -36,8 +36,8 @@ public class Client {
     protected Client() {
     }
 
-    public Client(String host, String version) throws MalformedURLException {
-        this.rootURL = host + "/api/" + version;
+    public Client(String host, String port, String version) throws MalformedURLException {
+        this.rootURL = String.format("http://%s:%s/api/%s", host, port, version);
     }
 
     protected ModelNode getNode(String op) throws IOException {

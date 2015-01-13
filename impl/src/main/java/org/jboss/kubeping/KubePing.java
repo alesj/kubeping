@@ -43,10 +43,13 @@ public class KubePing extends FILE_PING {
     private String host;
 
     @Property
+    private String port;
+
+    @Property
     private String version;
 
     @Property
-    private int port;
+    private int serverPort;
 
     private Server server;
     private Client client;
@@ -55,7 +58,15 @@ public class KubePing extends FILE_PING {
         if (host != null) {
             return host;
         } else {
-            return System.getenv("KUBERNETES_MASTER");
+            return System.getenv("KUBERNETES_RO_SERVICE_HOST");
+        }
+    }
+
+    private String getPort() {
+        if (port != null) {
+            return port;
+        } else {
+            return System.getenv("KUBERNETES_RO_SERVICE_PORT");
         }
     }
 
@@ -67,9 +78,9 @@ public class KubePing extends FILE_PING {
         }
     }
 
-    private int getPort() {
-        if (port > 0) {
-            return port;
+    private int getServerPort() {
+        if (serverPort > 0) {
+            return serverPort;
         } else {
             return 8888;
         }
@@ -77,9 +88,9 @@ public class KubePing extends FILE_PING {
 
     @Override
     public void start() throws Exception {
-        client = new Client(getHost(), getVersion());
+        client = new Client(getHost(), getPort(), getVersion());
 
-        server = new Server(getPort(), stack.getChannel());
+        server = new Server(getServerPort(), stack.getChannel());
         server.start();
     }
 
@@ -110,7 +121,7 @@ public class KubePing extends FILE_PING {
                 }
             }
         } catch (Exception e) {
-            log.debug(String.format("Failed to read ping data from Kubernetes for cluster: %s", clusterName), e);
+            log.warn(String.format("Failed to read ping data from Kubernetes for cluster: %s", clusterName), e);
         }
         return retval;
     }
