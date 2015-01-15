@@ -45,8 +45,9 @@ public class Client {
     }
 
     protected ModelNode getNode(String op) throws IOException {
-        InputStream stream = new URL(rootURL + "/" + op).openStream();
-        return ModelNode.fromJSONStream(stream);
+        try (InputStream stream = new URL(rootURL + "/" + op).openStream()) {
+            return ModelNode.fromJSONStream(stream);
+        }
     }
 
     public List<Pod> getPods() throws IOException {
