@@ -90,7 +90,7 @@ public class Client {
     }
 
     public PingData getPingData(String host, int port) throws Exception {
-        URL url = new URL("http", host, port, null);
+        URL url = new URL(String.format("http://%s:%s", host, port));
         PingData data = new PingData();
         try (InputStream is = url.openStream()) {
             data.readFrom(new DataInputStream(is));
