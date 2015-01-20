@@ -123,7 +123,7 @@ public class KubePing extends FILE_PING {
                 }
             }
         } catch (Exception e) {
-            log.warn(String.format("Failed to read ping data from Kubernetes for cluster: %s", clusterName), e);
+            log.warn(String.format("Failed to read ping data from Kubernetes [%s] for cluster: %s", client.info(), clusterName), e);
         }
         return retval;
     }
