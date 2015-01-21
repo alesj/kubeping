@@ -48,7 +48,7 @@ public class Server {
 
     public void start() {
         Undertow.Builder builder = Undertow.builder();
-        builder.addHttpListener(port, "127.0.0.1");
+        builder.addHttpListener(port, "0.0.0.0"); // bind to all
         builder.setHandler(new Handler());
         undertow = builder.build();
         undertow.start();
