@@ -25,10 +25,12 @@ import java.util.List;
 public class Container {
     private String name;
     private String host;
+    private String podIP;
     private List<Port> ports = new ArrayList<>();
 
-    public Container(String host) {
+    public Container(String host, String podIP) {
         this.host = host;
+        this.podIP = podIP;
     }
 
     public String getName() {
@@ -49,6 +51,14 @@ public class Container {
 
     public List<Port> getPorts() {
         return ports;
+    }
+
+    public String getPodIP() {
+        return podIP;
+    }
+
+    public void setPodIP(String podIP) {
+        this.podIP = podIP;
     }
 
     public Port getPort(String name) {

@@ -63,7 +63,7 @@ public class Client {
     }
 
     protected ModelNode getNode(String op) throws IOException {
-        try (InputStream stream = openStream(rootURL + "/" + op, 5, 1000)) {
+        try (InputStream stream = openStream(rootURL + "/" + op, 60, 1000)) {
             return ModelNode.fromJSONStream(stream);
         }
     }
@@ -78,12 +78,14 @@ public class Client {
             ModelNode currentState = item.get("currentState");
             ModelNode host = currentState.get("host");
             pod.setHost(host.asString());
+            ModelNode podIP = currentState.get("podIP");
+            pod.setPodIP(podIP.asString());
 
             ModelNode desiredState = item.get("desiredState");
             ModelNode manifest = desiredState.get("manifest");
             List<ModelNode> containers = manifest.get("containers").asList();
             for (ModelNode c : containers) {
-                Container container = new Container(pod.getHost());
+                Container container = new Container(pod.getHost(), pod.getPodIP());
                 String cname = c.get("name").asString();
                 container.setName(cname);
 
@@ -111,7 +113,7 @@ public class Client {
     public PingData getPingData(String host, int port) throws Exception {
         String url = String.format("http://%s:%s", host, port);
         PingData data = new PingData();
-        try (InputStream is = openStream(url, 3, 500)) {
+        try (InputStream is = openStream(url, 100, 500)) {
             data.readFrom(new DataInputStream(is));
         }
         return data;

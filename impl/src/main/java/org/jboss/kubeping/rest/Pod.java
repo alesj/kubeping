@@ -24,6 +24,7 @@ import java.util.List;
  */
 public class Pod {
     private String host;
+    private String podIP;
     private List<Container> containers = new ArrayList<>();
 
     public void setHost(String host) {
@@ -32,6 +33,14 @@ public class Pod {
 
     public String getHost() {
         return host;
+    }
+
+    public String getPodIP() {
+        return podIP;
+    }
+
+    public void setPodIP(String podIP) {
+        this.podIP = podIP;
     }
 
     void addContainer(Container container) {
