@@ -118,7 +118,7 @@ public class KubePing extends FILE_PING {
                 List<Container> containers = pod.getContainers();
                 for (Container container : containers) {
                     if (client.accept(container)) {
-                        retval.add(client.getPingData(container.getHost(), container.getPort("ping").getHostPort()));
+                        retval.add(client.getPingData(container.getHost(), container.getPort("ping").getContainerPort()));
                     }
                 }
             }
