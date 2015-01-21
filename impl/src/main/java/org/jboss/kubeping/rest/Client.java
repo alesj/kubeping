@@ -40,12 +40,30 @@ public class Client {
         this.rootURL = String.format("http://%s:%s/api/%s", host, port, version);
     }
 
+    private static InputStream openStream(String url, int tries, long sleep) {
+        while (tries > 0) {
+            tries--;
+            try {
+                URL xurl = new URL(url);
+                return xurl.openStream();
+            } catch (Throwable ignore) {
+            }
+            try {
+                Thread.sleep(sleep);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+        }
+        throw new IllegalStateException(String.format("Cannot open stream [%s].", url));
+    }
+
     public String info() {
         return "Kubernetes master URL: " + rootURL;
     }
 
     protected ModelNode getNode(String op) throws IOException {
-        try (InputStream stream = new URL(rootURL + "/" + op).openStream()) {
+        try (InputStream stream = openStream(rootURL + "/" + op, 5, 1000)) {
             return ModelNode.fromJSONStream(stream);
         }
     }
@@ -91,9 +109,9 @@ public class Client {
     }
 
     public PingData getPingData(String host, int port) throws Exception {
-        URL url = new URL(String.format("http://%s:%s", host, port));
+        String url = String.format("http://%s:%s", host, port);
         PingData data = new PingData();
-        try (InputStream is = url.openStream()) {
+        try (InputStream is = openStream(url, 3, 500)) {
             data.readFrom(new DataInputStream(is));
         }
         return data;
