@@ -16,10 +16,21 @@
 
 package org.jboss.kubeping.rest;
 
+import org.jgroups.Channel;
+
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public interface Server {
-    void start() throws Exception;
-    void stop();
+public class UndertowServerFactory implements ServerFactory {
+    public boolean isAvailable() {
+        try {
+            return UndertowServerFactory.class.getClassLoader().loadClass("io.undertow.Undertow") != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Server create(int port, Channel channel) {
+        return new UndertowServer(port, channel);
+    }
 }

@@ -23,6 +23,8 @@ import org.jboss.kubeping.rest.Client;
 import org.jboss.kubeping.rest.Container;
 import org.jboss.kubeping.rest.Pod;
 import org.jboss.kubeping.rest.Server;
+import org.jboss.kubeping.rest.ServerFactory;
+import org.jboss.kubeping.rest.Utils;
 import org.jgroups.Address;
 import org.jgroups.annotations.MBean;
 import org.jgroups.annotations.Property;
@@ -51,8 +53,13 @@ public class KubePing extends FILE_PING {
     @Property
     private int serverPort;
 
+    private ServerFactory factory;
     private Server server;
     private Client client;
+
+    public void setFactory(ServerFactory factory) {
+        this.factory = factory;
+    }
 
     private String getHost() {
         if (host != null) {
@@ -91,8 +98,11 @@ public class KubePing extends FILE_PING {
         client = new Client(getHost(), getPort(), getVersion());
         log.info(client.info());
 
-        server = new Server(getServerPort(), stack.getChannel());
-        log.info(server.info());
+        if (factory != null) {
+            server = factory.create(getServerPort(), stack.getChannel());
+        } else {
+            server = Utils.createServer(getServerPort(), stack.getChannel());
+        }
         server.start();
     }
 

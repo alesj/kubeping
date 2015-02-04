@@ -16,10 +16,12 @@
 
 package org.jboss.kubeping.rest;
 
+import org.jgroups.Channel;
+
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public interface Server {
-    void start() throws Exception;
-    void stop();
+public interface ServerFactory {
+    boolean isAvailable();
+    Server create(int port, Channel channel);
 }

@@ -14,12 +14,19 @@
  *  permissions and limitations under the License.
  */
 
-package org.jboss.kubeping.rest;
+package org.jboss.test.kubeping;
+
+import org.jboss.kubeping.KubePing;
+import org.jboss.kubeping.rest.JDKServerFactory;
+import org.jgroups.stack.Protocol;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public interface Server {
-    void start() throws Exception;
-    void stop();
+public class JDKServerTest extends ServerTestBase {
+    protected Protocol createPing() {
+        KubePing ping = new KubePing();
+        ping.setFactory(new JDKServerFactory());
+        return ping;
+    }
 }

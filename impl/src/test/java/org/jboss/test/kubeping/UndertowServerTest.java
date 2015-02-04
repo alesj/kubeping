@@ -16,38 +16,17 @@
 
 package org.jboss.test.kubeping;
 
-import java.io.DataInputStream;
-import java.io.InputStream;
-import java.net.URL;
-
 import org.jboss.kubeping.KubePing;
-import org.jboss.kubeping.rest.Server;
-import org.jgroups.protocols.PingData;
+import org.jboss.kubeping.rest.UndertowServerFactory;
 import org.jgroups.stack.Protocol;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class ServerTest extends TestBase {
-    @Override
-    protected int getNum() {
-        return 1;
-    }
-
+public class UndertowServerTest extends ServerTestBase {
     protected Protocol createPing() {
-        return new KubePing();
+        KubePing ping = new KubePing();
+        ping.setFactory(new UndertowServerFactory());
+        return ping;
     }
-
-    @Test
-    public void testResponse() throws Exception {
-        URL url = new URL("http://localhost:8888");
-        try (InputStream stream = url.openStream()) {
-            PingData data = new PingData();
-            data.readFrom(new DataInputStream(stream));
-            Assert.assertEquals(data, Server.createPingData(channels[0]));
-        }
-    }
-
 }
