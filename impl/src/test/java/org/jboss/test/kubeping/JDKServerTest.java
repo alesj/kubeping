@@ -18,15 +18,12 @@ package org.jboss.test.kubeping;
 
 import org.jboss.kubeping.KubePing;
 import org.jboss.kubeping.rest.JDKServerFactory;
-import org.jgroups.stack.Protocol;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class JDKServerTest extends ServerTestBase {
-    protected Protocol createPing() {
-        KubePing ping = new KubePing();
+    protected void applyConfig(KubePing ping) {
         ping.setFactory(new JDKServerFactory());
-        return ping;
     }
 }

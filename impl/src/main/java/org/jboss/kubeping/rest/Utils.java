@@ -19,7 +19,6 @@ package org.jboss.kubeping.rest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.jgroups.Address;
 import org.jgroups.Channel;
@@ -32,7 +31,6 @@ import org.jgroups.protocols.PingData;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class Utils {
-    private static final Logger log = Logger.getLogger(Utils.class.getName());
     private static final List<ServerFactory> factories;
 
     static {
@@ -50,7 +48,6 @@ public class Utils {
     public static Server createServer(int port, Channel channel) {
         for (ServerFactory factory : factories) {
             if (factory.isAvailable()) {
-                log.info(String.format("Server deamon port: %s, channel address: %s, factory: %s", port, channel.getAddress(), factory.getClass().getSimpleName()));
                 return factory.create(port, channel);
             }
         }

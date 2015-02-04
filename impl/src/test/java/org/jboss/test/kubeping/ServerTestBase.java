@@ -20,8 +20,12 @@ import java.io.DataInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.jboss.kubeping.Constants;
 import org.jboss.kubeping.KubePing;
+import org.jboss.kubeping.rest.Client;
 import org.jboss.kubeping.rest.Utils;
+import org.jboss.test.kubeping.support.TestServerClient;
+import org.jgroups.conf.ClassConfigurator;
 import org.jgroups.protocols.PingData;
 import org.jgroups.stack.Protocol;
 import org.junit.Assert;
@@ -36,6 +40,16 @@ public abstract class ServerTestBase extends TestBase {
         return 1;
     }
 
+    protected Protocol createPing() {
+        KubePing ping = new TestKubePing();
+        ping.setHost("localhost");
+        ping.setPort("1234");
+        applyConfig(ping);
+        return ping;
+    }
+
+    protected abstract void applyConfig(KubePing ping);
+
     @Test
     public void testResponse() throws Exception {
         URL url = new URL("http://localhost:8888");
@@ -46,4 +60,14 @@ public abstract class ServerTestBase extends TestBase {
         }
     }
 
+    private static final class TestKubePing extends KubePing {
+        static {
+            ClassConfigurator.addProtocol(Constants.HACK_KUBE_PING_ID, TestKubePing.class);
+        }
+
+        @Override
+        protected Client createClient() throws Exception {
+            return new TestServerClient();
+        }
+    }
 }

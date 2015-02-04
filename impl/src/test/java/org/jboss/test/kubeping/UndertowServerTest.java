@@ -24,9 +24,7 @@ import org.jgroups.stack.Protocol;
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
 public class UndertowServerTest extends ServerTestBase {
-    protected Protocol createPing() {
-        KubePing ping = new KubePing();
+    protected void applyConfig(KubePing ping) {
         ping.setFactory(new UndertowServerFactory());
-        return ping;
     }
 }

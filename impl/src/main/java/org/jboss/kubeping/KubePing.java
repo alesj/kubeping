@@ -69,12 +69,20 @@ public class KubePing extends FILE_PING {
         }
     }
 
+    public void setHost(String host) {
+        this.host = host;
+    }
+
     private String getPort() {
         if (port != null) {
             return port;
         } else {
             return System.getenv("KUBERNETES_RO_SERVICE_PORT");
         }
+    }
+
+    public void setPort(String port) {
+        this.port = port;
     }
 
     private String getVersion() {
@@ -93,9 +101,13 @@ public class KubePing extends FILE_PING {
         }
     }
 
+    protected Client createClient() throws Exception {
+        return new Client(getHost(), getPort(), getVersion());
+    }
+
     @Override
     public void start() throws Exception {
-        client = new Client(getHost(), getPort(), getVersion());
+        client = createClient();
         log.info(client.info());
 
         if (factory != null) {
@@ -103,6 +115,7 @@ public class KubePing extends FILE_PING {
         } else {
             server = Utils.createServer(getServerPort(), stack.getChannel());
         }
+        log.info(String.format("Server deamon port: %s, channel address: %s, server: %s", getServerPort(), stack.getChannel().getAddress(), server.getClass().getSimpleName()));
         server.start();
     }
 

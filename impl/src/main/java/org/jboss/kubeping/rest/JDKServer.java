@@ -18,6 +18,7 @@ package org.jboss.kubeping.rest;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -58,7 +59,9 @@ public class JDKServer extends AbstractServer {
             exchange.sendResponseHeaders(200, 0);
             try {
                 PingData data = Utils.createPingData(channel);
-                data.writeTo(new DataOutputStream(exchange.getResponseBody()));
+                try (OutputStream outputStream = exchange.getResponseBody()) {
+                    data.writeTo(new DataOutputStream(outputStream));
+                }
             } catch (Exception e) {
                 throw new IOException(e);
             }
