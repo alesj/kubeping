@@ -16,6 +16,7 @@
 
 package org.jboss.test.kubeping;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public abstract class TestBase {
             Protocol ping = createPing();
 
             channels[i] = new JChannel(
-                new TCP(),
+                new TCP().setValue("bind_addr", InetAddress.getLoopbackAddress()),
                 ping,
                 new NAKACK2(),
                 new UNICAST3(),
