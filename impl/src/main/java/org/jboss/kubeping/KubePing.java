@@ -53,6 +53,12 @@ public class KubePing extends FILE_PING {
     @Property
     private int serverPort;
 
+    @Property
+    private String labelsQuery;
+
+    @Property
+    private String pingPortName = "ping";
+
     private ServerFactory factory;
     private Server server;
     private Client client;
@@ -101,7 +107,23 @@ public class KubePing extends FILE_PING {
         }
     }
 
-    protected Client createClient() throws Exception {
+    public String getLabelsQuery() {
+		return labelsQuery;
+	}
+
+	public void setLabelsQuery(String labelsQuery) {
+		this.labelsQuery = labelsQuery;
+	}
+
+	public String getPingPortName() {
+		return pingPortName;
+	}
+
+	public void setPingPortName(String pingPortName) {
+		this.pingPortName = pingPortName;
+	}
+
+	protected Client createClient() throws Exception {
         return new Client(getHost(), getPort(), getVersion());
     }
 
@@ -136,12 +158,16 @@ public class KubePing extends FILE_PING {
     protected synchronized List<PingData> readAll(String clusterName) {
         List<PingData> retval = new ArrayList<>();
         try {
-            List<Pod> pods = client.getPods();
+            List<Pod> pods = client.getPods(getLabelsQuery());
             for (Pod pod : pods) {
                 List<Container> containers = pod.getContainers();
                 for (Container container : containers) {
                     if (client.accept(container)) {
-                        retval.add(client.getPingData(container.getPodIP(), container.getPort("ping").getContainerPort()));
+                        try {
+                            retval.add(client.getPingData(container.getPodIP(), container.getPort(pingPortName).getContainerPort()));
+                        } catch (IllegalArgumentException e) {
+                            log.debug(String.format("Pod [%s] has no port named [%s]", pod.getPodIP(), pingPortName), e);
+                        }
                     }
                 }
             }

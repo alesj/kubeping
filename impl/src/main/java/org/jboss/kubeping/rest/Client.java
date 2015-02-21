@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,13 +64,25 @@ public class Client {
     }
 
     protected ModelNode getNode(String op) throws IOException {
-        try (InputStream stream = openStream(rootURL + "/" + op, 60, 1000)) {
+        return getNode(op, null);
+    }
+
+    protected ModelNode getNode(String op, String labelsQuery) throws IOException {
+        String url = rootURL + "/" + op;
+        if (labelsQuery != null && labelsQuery.length() > 0) {
+            url += "?labels=" + URLEncoder.encode(labelsQuery, "UTF-8");
+        }
+        try (InputStream stream = openStream(url, 60, 1000)) {
             return ModelNode.fromJSONStream(stream);
         }
     }
 
     public List<Pod> getPods() throws IOException {
-        ModelNode root = getNode("pods");
+        return getPods(null);
+    }
+
+    public List<Pod> getPods(String labelsQuery) throws IOException {
+        ModelNode root = getNode("pods", labelsQuery);
         List<Pod> pods = new ArrayList<>();
         List<ModelNode> items = root.get("items").asList();
         for (ModelNode item : items) {
@@ -83,18 +96,21 @@ public class Client {
 
             ModelNode desiredState = item.get("desiredState");
             ModelNode manifest = desiredState.get("manifest");
+
+            if (!manifest.get("containers").isDefined()) continue;
             List<ModelNode> containers = manifest.get("containers").asList();
             for (ModelNode c : containers) {
                 Container container = new Container(pod.getHost(), pod.getPodIP());
                 String cname = c.get("name").asString();
                 container.setName(cname);
 
+                if (!c.get("ports").isDefined()) continue;
                 List<ModelNode> ports = c.get("ports").asList();
                 for (ModelNode p : ports) {
                     String pname = p.get("name").asString();
-                    String hostPort = p.get("hostPort").asString();
-                    String containerPort = p.get("containerPort").asString();
-                    Port port = new Port(pname, Integer.parseInt(hostPort), Integer.parseInt(containerPort));
+                    Port port = new Port(pname,
+                            p.get("hostPort").isDefined() ? p.get("hostPort").asInt() : null,
+                            p.get("containerPort").isDefined() ? p.get("containerPort").asInt() : null);
                     container.addPort(port);
                 }
 
@@ -107,7 +123,7 @@ public class Client {
     }
 
     public boolean accept(Container container) {
-        return true; // TODO -- filter WF instances
+        return container.getPorts() != null && container.getPorts().size() > 0;
     }
 
     public PingData getPingData(String host, int port) throws Exception {
