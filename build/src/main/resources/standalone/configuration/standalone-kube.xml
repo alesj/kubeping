@@ -290,7 +290,7 @@
             <cached-connection-manager/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:jdr:1.0"/>
-        <subsystem xmlns="urn:jboss:domain:jgroups:2.0" default-stack="udp">
+        <subsystem xmlns="urn:jboss:domain:jgroups:2.0" default-stack="tcp">
             <stack name="udp">
                 <transport type="UDP" socket-binding="jgroups-udp"/>
                 <protocol type="KubePING"/>
@@ -309,7 +309,9 @@
             </stack>
             <stack name="tcp">
                 <transport type="TCP" socket-binding="jgroups-tcp"/>
-                <protocol type="KubePING"/>
+                <protocol type="KubePING">
+                    <property name="labelsQuery">name=wildflyPod</property>
+                </protocol>
                 <protocol type="MERGE2"/>
                 <protocol type="FD_SOCK" socket-binding="jgroups-tcp-fd"/>
                 <protocol type="FD"/>
