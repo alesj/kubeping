@@ -71,7 +71,7 @@ public class TestServerClient extends Client {
     }
 
     @Override
-    protected ModelNode getNode(String op) throws IOException {
+    protected ModelNode getNode(String op, String labels) throws IOException {
         String value = ops.get(op);
         if (value == null) {
             throw new IllegalStateException("No such op: " + op);

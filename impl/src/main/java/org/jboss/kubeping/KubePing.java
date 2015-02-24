@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jboss.kubeping.rest.Client;
 import org.jboss.kubeping.rest.Container;
+import org.jboss.kubeping.rest.Context;
 import org.jboss.kubeping.rest.Pod;
 import org.jboss.kubeping.rest.Server;
 import org.jboss.kubeping.rest.ServerFactory;
@@ -162,12 +163,9 @@ public class KubePing extends FILE_PING {
             for (Pod pod : pods) {
                 List<Container> containers = pod.getContainers();
                 for (Container container : containers) {
-                    if (client.accept(container)) {
-                        try {
-                            retval.add(client.getPingData(container.getPodIP(), container.getPort(pingPortName).getContainerPort()));
-                        } catch (IllegalArgumentException e) {
-                            log.debug(String.format("Pod [%s] has no port named [%s]", pod.getPodIP(), pingPortName), e);
-                        }
+                    Context context = new Context(container, getPingPortName());
+                    if (client.accept(context)) {
+                        retval.add(client.getPingData(container.getPodIP(), container.getPort(getPingPortName()).getContainerPort()));
                     }
                 }
             }

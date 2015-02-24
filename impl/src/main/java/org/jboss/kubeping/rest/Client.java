@@ -97,15 +97,19 @@ public class Client {
             ModelNode desiredState = item.get("desiredState");
             ModelNode manifest = desiredState.get("manifest");
 
-            if (!manifest.get("containers").isDefined()) continue;
-            List<ModelNode> containers = manifest.get("containers").asList();
+            ModelNode ctns = manifest.get("containers");
+            if (ctns.isDefined() == false) continue;
+
+            List<ModelNode> containers = ctns.asList();
             for (ModelNode c : containers) {
                 Container container = new Container(pod.getHost(), pod.getPodIP());
                 String cname = c.get("name").asString();
                 container.setName(cname);
 
-                if (!c.get("ports").isDefined()) continue;
-                List<ModelNode> ports = c.get("ports").asList();
+                ModelNode pts = c.get("ports");
+                if (pts.isDefined() == false) continue;
+
+                List<ModelNode> ports = pts.asList();
                 for (ModelNode p : ports) {
                     String pname = p.get("name").asString();
                     Port port = new Port(pname,
@@ -122,8 +126,18 @@ public class Client {
         return pods;
     }
 
-    public boolean accept(Container container) {
-        return container.getPorts() != null && container.getPorts().size() > 0;
+    public boolean accept(Context context) {
+        Container container = context.getContainer();
+        List<Port> ports = container.getPorts();
+        if (ports != null) {
+            String pingPortName = context.getPingPortName();
+            for (Port port : ports) {
+                if (pingPortName.equalsIgnoreCase(port.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public PingData getPingData(String host, int port) throws Exception {

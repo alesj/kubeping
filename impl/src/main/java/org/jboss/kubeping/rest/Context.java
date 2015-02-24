@@ -19,30 +19,20 @@ package org.jboss.kubeping.rest;
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class Port {
-    private String name;
-    private Integer hostPort;
-    private Integer containerPort;
+public class Context {
+    private Container container;
+    private String pingPortName;
 
-    public Port(String name, Integer containerPort) {
-        this(name, null, containerPort);
+    public Context(Container container, String pingPortName) {
+        this.container = container;
+        this.pingPortName = pingPortName;
     }
 
-    public Port(String name, Integer hostPort, Integer containerPort) {
-        this.name = name;
-        this.hostPort = hostPort;
-        this.containerPort = containerPort;
+    public Container getContainer() {
+        return container;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public Integer getHostPort() {
-        return hostPort;
-    }
-
-    public Integer getContainerPort() {
-        return containerPort;
+    public String getPingPortName() {
+        return pingPortName;
     }
 }
