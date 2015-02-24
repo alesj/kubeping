@@ -23,10 +23,16 @@ import java.util.List;
  */
 public class Port {
     private String name;
-    private int hostPort;
-    private int containerPort;
+    private Integer hostPort;
+    private Integer containerPort;
 
-    public Port(String name, int hostPort, int containerPort) {
+    public Port(String name, Integer containerPort) {
+        this.name = name;
+        this.hostPort = null;
+        this.containerPort = containerPort;
+    }
+
+    public Port(String name, Integer hostPort, Integer containerPort) {
         this.name = name;
         this.hostPort = hostPort;
         this.containerPort = containerPort;
@@ -36,11 +42,11 @@ public class Port {
         return name;
     }
 
-    public int getHostPort() {
+    public Integer getHostPort() {
         return hostPort;
     }
 
-    public int getContainerPort() {
+    public Integer getContainerPort() {
         return containerPort;
     }
 }

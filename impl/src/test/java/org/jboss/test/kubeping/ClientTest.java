@@ -45,8 +45,8 @@ public class ClientTest {
         Assert.assertNotNull(container.getPorts());
         Assert.assertEquals(1, container.getPorts().size());
         Port port = container.getPort("output");
-        Assert.assertEquals(8080, port.getHostPort());
-        Assert.assertEquals(80, port.getContainerPort());
+        Assert.assertEquals(8080, port.getHostPort().intValue());
+        Assert.assertEquals(80, port.getContainerPort().intValue());
     }
 
 }
