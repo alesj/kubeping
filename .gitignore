@@ -17,4 +17,5 @@ target/
 lib/
 impl/target/
 integration/target/
+docker/wildfly-kubeping.zip
 
