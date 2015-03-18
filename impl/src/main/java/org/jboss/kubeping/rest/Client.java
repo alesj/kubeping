@@ -39,11 +39,14 @@ public class Client {
     }
 
     public Client(String host, String port, String version, Certs certs) throws MalformedURLException {
-        this.rootURL = String.format("http://%s:%s/api/%s", host, port, version);
+        final String protocol = (certs != null) ? "https" : "http";
+        this.rootURL = String.format("%s://%s:%s/api/%s", protocol, host, port, version);
         this.certs = certs;
     }
 
     private InputStream openStream(String url, int tries, long sleep) {
+        final int attempts = tries;
+        Throwable lastFail = null;
         while (tries > 0) {
             tries--;
             try {
@@ -53,7 +56,8 @@ public class Client {
                     URL xurl = new URL(url);
                     return xurl.openStream();
                 }
-            } catch (Throwable ignore) {
+            } catch (Throwable fail) {
+                lastFail = fail;
             }
             try {
                 Thread.sleep(sleep);
@@ -62,7 +66,11 @@ public class Client {
                 throw new RuntimeException(e);
             }
         }
-        throw new IllegalStateException(String.format("Cannot open stream [%s].", url));
+        String emsg = String.format("%s attempt(s) to open stream [%s] failed. Last failure was [%s: %s].",
+                attempts, url,
+                (lastFail != null ? lastFail.getClass().getName() : "null"),
+                (lastFail != null ? lastFail.getMessage() : ""));
+        throw (lastFail != null) ? new IllegalStateException(emsg, lastFail) : new IllegalStateException(emsg);
     }
 
     public String info() {

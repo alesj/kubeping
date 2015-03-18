@@ -22,15 +22,17 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
+import org.jgroups.Channel;
+import org.jgroups.protocols.PingData;
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import org.jgroups.Channel;
-import org.jgroups.protocols.PingData;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
+@SuppressWarnings("restriction")
 public class JDKServer extends AbstractServer {
     private HttpServer server;
 
@@ -42,9 +44,7 @@ public class JDKServer extends AbstractServer {
         InetSocketAddress address = new InetSocketAddress("0.0.0.0", port);
         server = HttpServer.create(address, 0);
         server.setExecutor(Executors.newCachedThreadPool());
-
         server.createContext("/", new Handler());
-
         server.start();
     }
 

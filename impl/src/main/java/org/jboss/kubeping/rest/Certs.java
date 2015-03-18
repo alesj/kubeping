@@ -66,8 +66,15 @@ public class Certs {
     public InputStream openStream(String url) throws Exception {
         URL requestedUrl = new URL(url);
         URLConnection connection = requestedUrl.openConnection();
-        if(connection instanceof HttpsURLConnection) {
+        if (connection instanceof HttpsURLConnection) {
             HttpsURLConnection.class.cast(connection).setSSLSocketFactory(factory);
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(String.format("Using HttpsURLConnection with SSLSocketFactory [%s] for url [%s].", factory, url));
+            }
+        } else {
+            if (log.isLoggable(Level.FINE)) {
+                log.fine(String.format("Using URLConnection for url [%s].", url));
+            }
         }
         return connection.getInputStream();
     }
