@@ -6,6 +6,7 @@
 .classpath
 .factorypath
 .settings/
+.metadata/
 .idea/
 .idea
 .DS_Store
@@ -17,5 +18,6 @@ target/
 lib/
 impl/target/
 integration/target/
-docker/wildfly-kubeping.zip
+docker/eap/jboss-eap-kubeping.zip
+docker/wildfly/wildfly-kubeping.zip
 
