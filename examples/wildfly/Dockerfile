@@ -1,6 +1,7 @@
-# Name: alesj/kubeping-cluster
+# JBoss WildFly with KubePING impl and examples.
+# Name: 10.245.2.2:5000/dward/wildfly-kubeping-examples:v1
 
-FROM alesj/wildfly-kubeping
+FROM 10.245.2.2:5000/dward/wildfly-kubeping:latest
 
 # ADD https://www.dropbox.com/s/ppug24nhmu3nz5f/hello-servlet-2.0-SNAPSHOT.war?dl=0 /opt/jboss/wildfly/standalone/deployments/hello.war
 RUN curl -O -L https://www.dropbox.com/s/ppug24nhmu3nz5f/hello-servlet-2.0-SNAPSHOT.war

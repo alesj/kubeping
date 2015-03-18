@@ -17,5 +17,6 @@ target/
 lib/
 impl/target/
 integration/target/
-docker/wildfly-kubeping.zip
+docker/eap/jboss-eap-kubeping.zip
+docker/wildfly/wildfly-kubeping.zip
 

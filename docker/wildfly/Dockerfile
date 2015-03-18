@@ -1,5 +1,5 @@
 # WildFly with KubePING impl.
-# Should be found under "alesj/wildfly-kubeping".
+# Name: 10.245.2.2:5000/dward/wildfly-kubeping:v1
 
 # Use latest jboss/base-jdk:7 image as the base
 FROM jboss/base-jdk:7
@@ -7,7 +7,7 @@ FROM jboss/base-jdk:7
 # Set the WILDFLY_VERSION env variable
 ENV WILDFLY_VERSION 8.2.0.Final
 
-# Add the WildFly KubePing distribution to /opt, and make wildfly the owner
+# Add the WildFly KubePing distribution to /opt, and make jboss the owner
 # Make sure the distribution is available from a well-known place
 RUN cd /opt/jboss
 ADD wildfly-kubeping.zip /opt/jboss/

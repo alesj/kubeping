@@ -25,16 +25,16 @@
     <includeBaseDirectory>false</includeBaseDirectory>
     <fileSets>
         <fileSet>
-            <directory>../download/target/wildfly-${version.org.wildfly}</directory>
+            <directory>../../download/target/wildfly-${version.org.wildfly}</directory>
             <outputDirectory>/wildfly</outputDirectory>
         </fileSet>
         <fileSet>
-            <directory>../download/target/wildfly-${version.org.wildfly}/bin</directory>
+            <directory>../../download/target/wildfly-${version.org.wildfly}/bin</directory>
             <outputDirectory>/wildfly/bin</outputDirectory>
             <fileMode>0755</fileMode>
         </fileSet>
         <fileSet>
-            <directory>../download/target/wildfly-${version.org.wildfly}/bin/init.d</directory>
+            <directory>../../download/target/wildfly-${version.org.wildfly}/bin/init.d</directory>
             <outputDirectory>/wildfly/bin/init.d</outputDirectory>
             <fileMode>0755</fileMode>
         </fileSet>
