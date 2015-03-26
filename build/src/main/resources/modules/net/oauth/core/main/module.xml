@@ -22,7 +22,7 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.3" name="org.jboss.kubeping">
+<module xmlns="urn:jboss:module:1.3" name="net.oauth.core">
 
     <resources>
         <!-- Insert resources here -->
@@ -30,9 +30,5 @@
 
     <dependencies>
         <module name="javax.api"/>
-        <module name="org.jgroups"/>
-        <module name="org.jboss.dmr"/>
-        <module name="io.undertow.core"/>
-        <module name="net.oauth.core"/>
     </dependencies>
 </module>

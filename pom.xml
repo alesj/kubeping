@@ -51,6 +51,7 @@
         <!-- Impl -->
         <version.jgroups>3.4.5.Final</version.jgroups>
         <version.dmr>1.2.0.Final</version.dmr>
+        <version.oauth>20100527</version.oauth>
         <version.undertow>1.1.0.Final</version.undertow>
         <version.junit>4.11</version.junit>
         <!-- Build -->
@@ -98,6 +99,12 @@
                 <groupId>org.jboss</groupId>
                 <artifactId>jboss-dmr</artifactId>
                 <version>${version.dmr}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.oauth.core</groupId>
+                <artifactId>oauth</artifactId>
+                <version>${version.oauth}</version>
             </dependency>
 
             <dependency>

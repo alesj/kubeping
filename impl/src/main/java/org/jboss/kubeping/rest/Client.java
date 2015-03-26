@@ -33,20 +33,26 @@ import org.jgroups.protocols.PingData;
  */
 public class Client {
     private String rootURL;
+    private Certs certs;
 
     protected Client() {
     }
 
-    public Client(String host, String port, String version) throws MalformedURLException {
+    public Client(String host, String port, String version, Certs certs) throws MalformedURLException {
         this.rootURL = String.format("http://%s:%s/api/%s", host, port, version);
+        this.certs = certs;
     }
 
-    private static InputStream openStream(String url, int tries, long sleep) {
+    private InputStream openStream(String url, int tries, long sleep) {
         while (tries > 0) {
             tries--;
             try {
-                URL xurl = new URL(url);
-                return xurl.openStream();
+                if (certs != null) {
+                    return certs.openStream(url);
+                } else {
+                    URL xurl = new URL(url);
+                    return xurl.openStream();
+                }
             } catch (Throwable ignore) {
             }
             try {

@@ -19,6 +19,7 @@ package org.jboss.kubeping;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jboss.kubeping.rest.Certs;
 import org.jboss.kubeping.rest.Client;
 import org.jboss.kubeping.rest.Container;
 import org.jboss.kubeping.rest.Context;
@@ -59,6 +60,21 @@ public class KubePing extends FILE_PING {
 
     @Property
     private String pingPortName = "ping";
+
+    @Property
+    private String certFile;
+
+    @Property
+    private String keyFile;
+
+    @Property
+    private String keyPassword;
+
+    @Property
+    private String keyAlgo;
+
+    @Property
+    private String caFile;
 
     private ServerFactory factory;
     private Server server;
@@ -108,24 +124,18 @@ public class KubePing extends FILE_PING {
         }
     }
 
-    public String getLabelsQuery() {
-		return labelsQuery;
-	}
+    protected Certs createCerts() throws Exception {
+        if (getCertFile() != null) {
+            log.info(String.format("Using certificate: %s", getCertFile()));
+            return new Certs(getCertFile(), getKeyFile(), getKeyPassword(), getKeyAlgo(), getCaFile());
+        } else {
+            log.info("No certificate configured.");
+            return null;
+        }
+    }
 
-	public void setLabelsQuery(String labelsQuery) {
-		this.labelsQuery = labelsQuery;
-	}
-
-	public String getPingPortName() {
-		return pingPortName;
-	}
-
-	public void setPingPortName(String pingPortName) {
-		this.pingPortName = pingPortName;
-	}
-
-	protected Client createClient() throws Exception {
-        return new Client(getHost(), getPort(), getVersion());
+    protected Client createClient() throws Exception {
+        return new Client(getHost(), getPort(), getVersion(), createCerts());
     }
 
     @Override
@@ -186,5 +196,81 @@ public class KubePing extends FILE_PING {
 
     @Override
     protected void remove(String clustername, Address addr) {
+    }
+
+    public String getLabelsQuery() {
+        return labelsQuery;
+    }
+
+    public void setLabelsQuery(String labelsQuery) {
+        this.labelsQuery = labelsQuery;
+    }
+
+    public String getPingPortName() {
+        return pingPortName;
+    }
+
+    public void setPingPortName(String pingPortName) {
+        this.pingPortName = pingPortName;
+    }
+
+    public String getCertFile() {
+        if (certFile != null) {
+            return certFile;
+        } else {
+            return System.getenv("KUBERNETES_CLIENT_CERTIFICATE_FILE");
+        }
+    }
+
+    public void setCertFile(String certFile) {
+        this.certFile = certFile;
+    }
+
+    public String getKeyFile() {
+        if (keyFile != null) {
+            return keyFile;
+        } else {
+            return System.getenv("KUBERNETES_CLIENT_KEY_FILE");
+        }
+    }
+
+    public void setKeyFile(String keyFile) {
+        this.keyFile = keyFile;
+    }
+
+    public String getKeyPassword() {
+        if (keyPassword != null) {
+            return keyPassword;
+        } else {
+            return System.getenv("KUBERNETES_CLIENT_KEY_PASSWORD");
+        }
+    }
+
+    public void setKeyPassword(String keyPassword) {
+        this.keyPassword = keyPassword;
+    }
+
+    public String getKeyAlgo() {
+        if (keyAlgo != null) {
+            return keyAlgo;
+        } else {
+            return System.getenv("KUBERNETES_CLIENT_KEY_ALGO");
+        }
+    }
+
+    public void setKeyAlgo(String keyAlgo) {
+        this.keyAlgo = keyAlgo;
+    }
+
+    public String getCaFile() {
+        if (caFile != null) {
+            return caFile;
+        } else {
+            return System.getenv("KUBERNETES_CA_CERTIFICATE_FILE");
+        }
+    }
+
+    public void setCaFile(String caFile) {
+        this.caFile = caFile;
     }
 }

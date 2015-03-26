@@ -175,6 +175,11 @@
         </dependency>
 
         <dependency>
+            <groupId>net.oauth.core</groupId>
+            <artifactId>oauth</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-clustering-jgroups</artifactId>
         </dependency>
