@@ -47,7 +47,7 @@
         </module-def>
 
         <module-def name="org.jboss.kubeping">
-            <maven-resource group="org.jboss.kubeping" artifact="ping"/>
+            <maven-resource group="org.jboss.kubeping" artifact="kubeping"/>
         </module-def>
 
         <module-def name="net.oauth.core">

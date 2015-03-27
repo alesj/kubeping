@@ -84,11 +84,26 @@ public class KubePing extends FILE_PING {
         this.factory = factory;
     }
 
+    private String trimToNull(String s) {
+        if (s != null) {
+            s = s.trim();
+            if (s.length() == 0) {
+                s = null;
+            }
+        }
+        return s;
+    }
+
     private String getHost() {
         if (host != null) {
             return host;
         } else {
-            return System.getenv("KUBERNETES_RO_SERVICE_HOST");
+            String omh = trimToNull(System.getenv("OPENSHIFT_MASTER_HOST"));
+            if (omh != null) {
+                return omh;
+            } else {
+                return System.getenv("KUBERNETES_RO_SERVICE_HOST");
+            }
         }
     }
 
@@ -100,7 +115,12 @@ public class KubePing extends FILE_PING {
         if (port != null) {
             return port;
         } else {
-            return System.getenv("KUBERNETES_RO_SERVICE_PORT");
+            String omp = trimToNull(System.getenv("OPENSHIFT_MASTER_PORT"));
+            if (omp != null) {
+                return omp;
+            } else {
+                return System.getenv("KUBERNETES_RO_SERVICE_PORT");
+            }
         }
     }
 

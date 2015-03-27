@@ -16,11 +16,12 @@
 
 package org.jboss.kubeping.rest;
 
-import java.io.DataOutputStream;
-
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+
+import java.io.DataOutputStream;
+
 import org.jgroups.Channel;
 import org.jgroups.protocols.PingData;
 
@@ -49,7 +50,6 @@ public class UndertowServer extends AbstractServer {
     private class Handler implements HttpHandler {
         public void handleRequest(HttpServerExchange exchange) throws Exception {
             exchange.startBlocking();
-
             PingData data = Utils.createPingData(channel);
             data.writeTo(new DataOutputStream(exchange.getOutputStream()));
         }

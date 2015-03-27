@@ -22,21 +22,19 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
+import org.jboss.com.sun.net.httpserver.HttpExchange;
+import org.jboss.com.sun.net.httpserver.HttpHandler;
+import org.jboss.com.sun.net.httpserver.HttpServer;
 import org.jgroups.Channel;
 import org.jgroups.protocols.PingData;
-
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-@SuppressWarnings("restriction")
-public class JDKServer extends AbstractServer {
+public class JBossServer extends AbstractServer {
     private HttpServer server;
 
-    public JDKServer(int port, Channel channel) {
+    public JBossServer(int port, Channel channel) {
         super(port, channel);
     }
 

@@ -14,16 +14,28 @@
  *  permissions and limitations under the License.
  */
 
-package org.jboss.test.kubeping;
+package org.jboss.kubeping.rest;
 
-import org.jboss.kubeping.KubePing;
-import org.jboss.kubeping.rest.UndertowServerFactory;
+import java.util.logging.Logger;
+
+import org.jgroups.Channel;
 
 /**
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public class UndertowServerTest extends ServerTestBase {
-    protected void applyConfig(KubePing ping) {
-        ping.setFactory(new UndertowServerFactory());
+public class JBossServerFactory implements ServerFactory {
+    private static final Logger log = Logger.getLogger(JBossServerFactory.class.getName());
+
+    public boolean isAvailable() {
+        try {
+            return JBossServerFactory.class.getClassLoader().loadClass("org.jboss.com.sun.net.httpserver.HttpServer") != null;
+        } catch (Exception e) {
+            log.warning(e.getClass().getName() + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Server create(int port, Channel channel) {
+        return new JBossServer(port, channel);
     }
 }
