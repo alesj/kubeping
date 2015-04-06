@@ -32,6 +32,20 @@
                             <outputDirectory>${project.build.directory}</outputDirectory>
                         </configuration>
                     </execution>
+
+		    <execution>
+                        <id>unpack-as_jube</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeGroupIds>io.fabric8.jube.images.wildfly</includeGroupIds>
+                            <includeArtifactIds>default</includeArtifactIds>
+                            <includeClassifiers>image</includeClassifiers>
+                            <outputDirectory>${project.build.directory}/jube-wildfly-image</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
@@ -43,6 +57,13 @@
             <groupId>org.wildfly</groupId>
             <artifactId>wildfly-dist</artifactId>
             <type>zip</type>
+        </dependency>
+
+	<dependency>
+            <groupId>io.fabric8.jube.images.wildfly</groupId>
+            <artifactId>default</artifactId>
+            <type>zip</type>
+            <classifier>image</classifier>
         </dependency>
 
     </dependencies>

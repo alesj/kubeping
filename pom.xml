@@ -65,6 +65,7 @@
         <module>impl</module>
         <module>download</module>
         <module>build</module>
+	    <module>build-jube</module>
     </modules>
 
     <dependencyManagement>
@@ -117,6 +118,14 @@
                 <groupId>org.wildfly</groupId>
                 <artifactId>wildfly-clustering-jgroups</artifactId>
                 <version>${version.org.wildfly}</version>
+            </dependency>
+
+	        <dependency>
+                <groupId>io.fabric8.jube.images.wildfly</groupId>
+                <artifactId>default</artifactId>
+                <version>2.0.20</version>
+                <type>zip</type>
+                <classifier>image</classifier>
             </dependency>
 
             <dependency>
