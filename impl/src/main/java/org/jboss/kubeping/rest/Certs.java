@@ -19,7 +19,6 @@ package org.jboss.kubeping.rest;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.KeyFactory;
@@ -53,7 +52,11 @@ public class Certs {
     private final SSLSocketFactory factory;
 
     public Certs(String clientCertFile, String clientKeyFile, String clientKeyPassword, String clientKeyAlgo, String caCertFile) throws Exception {
-        KeyManager[] keyManagers = configureClientCert(clientCertFile, clientKeyFile, clientKeyPassword.toCharArray(), clientKeyAlgo);
+        // defaults - RSA and empty password
+        char[] password = (clientKeyPassword != null) ? clientKeyPassword.toCharArray() : new char[0];
+        String algorithm = (clientKeyAlgo != null) ? clientKeyAlgo : "RSA";
+
+        KeyManager[] keyManagers = configureClientCert(clientCertFile, clientKeyFile, password, algorithm);
         TrustManager[] trustManagers = configureCaCert(caCertFile);
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(keyManagers, trustManagers, null);
