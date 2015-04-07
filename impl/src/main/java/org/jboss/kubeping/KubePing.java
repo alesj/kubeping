@@ -88,7 +88,12 @@ public class KubePing extends FILE_PING {
         if (host != null) {
             return host;
         } else {
-            return System.getenv("KUBERNETES_RO_SERVICE_HOST");
+            String omh = trimToNull(System.getenv("OPENSHIFT_MASTER_HOST"));
+            if (omh != null) {
+                return omh;
+            } else {
+                return System.getenv("KUBERNETES_RO_SERVICE_HOST");
+            }
         }
     }
 
@@ -100,7 +105,12 @@ public class KubePing extends FILE_PING {
         if (port != null) {
             return port;
         } else {
-            return System.getenv("KUBERNETES_RO_SERVICE_PORT");
+            String omp = trimToNull(System.getenv("OPENSHIFT_MASTER_PORT"));
+            if (omp != null) {
+                return omp;
+            } else {
+                return System.getenv("KUBERNETES_RO_SERVICE_PORT");
+            }
         }
     }
 
@@ -148,14 +158,19 @@ public class KubePing extends FILE_PING {
         } else {
             server = Utils.createServer(getServerPort(), stack.getChannel());
         }
-        log.info(String.format("Server deamon port: %s, channel address: %s, server: %s", getServerPort(), stack.getChannel().getAddress(), server.getClass().getSimpleName()));
+        final String serverName = server.getClass().getSimpleName();
+        log.info(String.format("Starting server: %s, daemon port: %s, channel address: %s", serverName, getServerPort(), stack.getChannel().getAddress()));
         server.start();
+        log.info(String.format("%s started.", serverName));
     }
 
     @Override
     public void stop() {
         try {
+            final String serverName = server.getClass().getSimpleName();
+            log.info(String.format("Stopping server: %s", serverName));
             server.stop();
+            log.info(String.format("%s stopped.", serverName));
         } finally {
             super.stop();
         }
@@ -272,5 +287,15 @@ public class KubePing extends FILE_PING {
 
     public void setCaFile(String caFile) {
         this.caFile = caFile;
+    }
+
+    private String trimToNull(String s) {
+        if (s != null) {
+            s = s.trim();
+            if (s.length() == 0) {
+                s = null;
+            }
+        }
+        return s;
     }
 }
