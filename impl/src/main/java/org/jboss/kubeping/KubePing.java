@@ -57,6 +57,9 @@ public class KubePing extends FILE_PING {
 
     @Property
     private String labelsQuery;
+    
+    @Property
+    private String namespace;
 
     @Property
     private String pingPortName = "ping";
@@ -184,7 +187,7 @@ public class KubePing extends FILE_PING {
     protected synchronized List<PingData> readAll(String clusterName) {
         List<PingData> retval = new ArrayList<>();
         try {
-            List<Pod> pods = client.getPods(getLabelsQuery());
+            List<Pod> pods = client.getPods(getNamespace(), getLabelsQuery());
             for (Pod pod : pods) {
                 List<Container> containers = pod.getContainers();
                 for (Container container : containers) {
@@ -219,6 +222,14 @@ public class KubePing extends FILE_PING {
 
     public void setLabelsQuery(String labelsQuery) {
         this.labelsQuery = labelsQuery;
+    }
+    
+    public String getNamespace() {
+        return namespace;
+    }
+    
+    public void setNamespace(String namespace) {
+        this.namespace = namespace;
     }
 
     public String getPingPortName() {

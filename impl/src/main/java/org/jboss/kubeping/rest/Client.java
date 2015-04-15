@@ -78,13 +78,18 @@ public class Client {
     }
 
     protected ModelNode getNode(String op) throws IOException {
-        return getNode(op, null);
+        return getNode(op, null, null);
     }
 
-    protected ModelNode getNode(String op, String labelsQuery) throws IOException {
+    protected ModelNode getNode(String op, String namespace, String labelsQuery) throws IOException {
         String url = rootURL + "/" + op;
+        boolean queryNotEmpty = false;
         if (labelsQuery != null && labelsQuery.length() > 0) {
             url += "?labels=" + URLEncoder.encode(labelsQuery, "UTF-8");
+            queryNotEmpty = true;
+        }
+        if (namespace != null && namespace.length() > 0) {
+            url += (queryNotEmpty?"&":"?") + "namespace=" +  URLEncoder.encode(namespace, "UTF-8");
         }
         try (InputStream stream = openStream(url, 60, 1000)) {
             return ModelNode.fromJSONStream(stream);
@@ -92,11 +97,11 @@ public class Client {
     }
 
     public List<Pod> getPods() throws IOException {
-        return getPods(null);
+        return getPods(null, null);
     }
 
-    public List<Pod> getPods(String labelsQuery) throws IOException {
-        ModelNode root = getNode("pods", labelsQuery);
+    public List<Pod> getPods(String namespace, String labelsQuery) throws IOException {
+        ModelNode root = getNode("pods", namespace, labelsQuery);
         List<Pod> pods = new ArrayList<>();
         List<ModelNode> items = root.get("items").asList();
         for (ModelNode item : items) {
